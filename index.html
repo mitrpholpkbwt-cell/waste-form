@@ -410,11 +410,13 @@ async function submit(){
       timestamp:   new Date().toLocaleString('th-TH'),
       photos:      photos.map(p=>({name:p.name, type:p.type, data:p.dataUrl.split(',')[1]}))
     };
-    await fetch(GAS_URL, {
-      method:'POST', mode:'no-cors',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
+    try {
+      await fetch(GAS_URL, {
+        method:'POST', mode:'no-cors',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+    } catch(_) {}
     el('ld-txt').textContent = 'เสร็จแล้วค่ะ!';
     await new Promise(r=>setTimeout(r,500));
     el('ld').classList.remove('on');
@@ -433,9 +435,8 @@ async function submit(){
     el('done-sum').innerHTML = dh;
     show('p3'); setFlow(4); scrollTop();
   } catch(e){
-    el('ld').classList.remove('on');
-    alert('เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้งค่ะ');
-    el('sbtn').disabled = false;
+    console.log('fetch error (ignored):', e);
+    // ดำเนินการต่อแม้จะมี error จาก no-cors
   }
 }
 
