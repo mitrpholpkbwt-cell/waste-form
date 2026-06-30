@@ -247,7 +247,7 @@ body{font-family:'Sarabun',sans-serif;background:var(--bg);color:var(--txt);min-
 
 <script>
 // ════════════════════════════════════════
-const GAS_URL = "https://script.google.com/macros/s/AKfycbxU-PXK5Jkj2saq4r9o5nTq8XP2Vk4eDCeDWxgOsMGe7Dls3Q7oWCpuq77PXVSHpeXOtw/exec";
+const GAS_URL = "https://script.google.com/macros/s/AKfycby9CW5CBpWO4cH4R8kevB9QpG7tAhGhdGIwi24_JzSFB3qw_pqIoMzfp7GoZblq9uX0/exec";
 const NOTIFY_EMAIL = "mitrpholpkbwt@gmail.com";
 // ════════════════════════════════════════
 
@@ -410,13 +410,13 @@ async function submit(){
       timestamp:   new Date().toLocaleString('th-TH'),
       photos:      photos.map(p=>({name:p.name, type:p.type, data:p.dataUrl.split(',')[1]}))
     };
-    try {
-      await fetch(GAS_URL, {
-        method:'POST', mode:'no-cors',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(payload)
-      });
-    } catch(_) {}
+    const res = await fetch(GAS_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    if(!result.ok) throw new Error(result.error || 'error');
     el('ld-txt').textContent = 'เสร็จแล้วค่ะ!';
     await new Promise(r=>setTimeout(r,500));
     el('ld').classList.remove('on');
@@ -435,8 +435,9 @@ async function submit(){
     el('done-sum').innerHTML = dh;
     show('p3'); setFlow(4); scrollTop();
   } catch(e){
-    console.log('fetch error (ignored):', e);
-    // ดำเนินการต่อแม้จะมี error จาก no-cors
+    el('ld').classList.remove('on');
+    alert('เกิดข้อผิดพลาด: ' + e.message);
+    el('sbtn').disabled = false;
   }
 }
 
