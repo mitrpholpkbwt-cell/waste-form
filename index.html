@@ -424,7 +424,7 @@ async function submit(){
     el('refnum').textContent = ref;
     el('done-earn').textContent = sessionTotal.toFixed(2)+' บาท';
     el('done-earn-sub').textContent = sessionTotal > total ? 'รายการนี้ '+total.toFixed(2)+' บ. · สะสม '+sessionTotal.toFixed(2)+' บ.' : '';
-    let dh = [['👤 ชื่อผู้ฝาก', base.name||'-']]
+    let dh = [['👤 ชื่อผู้ฝาก', payload.name||'-']]
       .map(([k,v]) => `<div class="srow"><span class="sk">${k}</span><span class="sv">${esc(v)}</span></div>`).join('');
     dh += items.map(i =>
       `<div class="srow">
